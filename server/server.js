@@ -4,6 +4,8 @@ const path = require("path");
 const bodyParser = require("body-parser");
 var cors = require("cors");
 const bookModel = require("./models/BookModel");
+const userModel = require('./models/UserModel');
+const generateToken = require("./utils/generateToken");
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -66,6 +68,37 @@ app.get("/bookSearch/:search", async (req, res) => {
   }
 });
 
+app.post("/register", async (req, res) => {
+  const user = new userModel(req.body);
+  const userExists = await userModel.findOne({Email: req.body.Email})
+  if(userExists){
+    res.status(400)
+    console.log("User Already Exists")
+  }
+  try {
+    await user.save();
+    res.send(user.Email);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+app.post("/login", async (req, res) => {
+  const user = await userModel.findOne({Email: req.body.Email})
+  console.log(user)
+  try {
+    if(user && (await user.matchPassword(req.body.Password))){
+      res.json({
+        _id: user._id,
+        Email: user.Email,
+        Token: generateToken(user._id)
+      })
+    }
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
 app.post("/book", async (req, res) => {
   const book = new bookModel(req.body);
   try {
@@ -75,7 +108,6 @@ app.post("/book", async (req, res) => {
     res.status(500).send(err);
   }
 });
-
 app.get("/books/:id", async (req, res) => {
   const book = await bookModel.findOne({ _id: req.params.id });
   try {

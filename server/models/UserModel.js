@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+const bcrypt = require('bcrypt');
 
-const userSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
   FirstName: {
     type: String,
     required: true,
@@ -10,6 +11,7 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   Password: {
+    type: String,
     required: true,
   },
   Email: {
@@ -24,12 +26,18 @@ const userSchema = new mongoose.Schema({
       return emailRegex.test(value);
     },
   },
-  Books: [
-    {
-      _id: String,
-    },
-  ],
 });
+UserSchema.pre('save', async function(next){
+  if(!this.isModified('Password')){
+    next();
+  }
+  const salt = await bcrypt.genSalt(10);
+  this.Password = await bcrypt.hash(this.Password, salt);
+})
+
+UserSchema.methods.matchPassword= async function (enteredPassword){
+  return await bcrypt.compare(enteredPassword, this.Password)
+};
 
 const User = mongoose.model("UsersModel", UserSchema);
 module.exports = User;
