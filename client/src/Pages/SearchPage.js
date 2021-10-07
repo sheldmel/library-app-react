@@ -61,22 +61,27 @@ function BasicTable(props) {
   );
 }
 
-export const HomePage = () => {
-  const [rows, setRows] = useState([]);
-
+export const SearchPage = (props) => {
+  const [rows, setRows] = useState("");
+  const search = props.match.params.search;
   useEffect(() => {
-    document.title = "E-Library";
+    console.log(search);
+    document.title = `E-Library: ${search}`;
     axios
-      .get("http://localhost:8081/books")
+      .get(`http://localhost:8081/bookSearch/${search}`)
       .then((response) => {
-        console.log(response.data);
-        const data = response.data;
-        setRows(data);
+        if (response.data.length != 0) {
+          console.log(response.data);
+          const data = response.data;
+          setRows(data);
+        } else {
+          setRows("");
+        }
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [search]);
   return (
     <Box>
       <Topbar></Topbar>
@@ -90,9 +95,11 @@ export const HomePage = () => {
       >
         <Searchbar></Searchbar>
       </div>
-      <BasicTable rows={rows}></BasicTable>
+      {rows === "" ? (
+        <h2 style={{ margin: "4%" }}>No results were found. </h2>
+      ) : (
+        <BasicTable rows={rows}></BasicTable>
+      )}
     </Box>
   );
 };
-
-export default HomePage;
