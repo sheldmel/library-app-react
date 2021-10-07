@@ -31,9 +31,18 @@ app.get('/books', async (req, res) => {
     }
 });
 
+
+app.get('/book/:genre', async (req, res) => {
+  const books = await bookModel.find({bookGenre: req.params.genre});
+  try {
+      res.send(books);
+  } catch (err) {
+      res.status(500).send(err);
+  }
+});
+
 app.post('/book', async (req, res) => {
     const book = new bookModel(req.body);
-  
     try {
       await book.save();
       res.send(book);
@@ -43,8 +52,8 @@ app.post('/book', async (req, res) => {
   });
 
 app.get('/books/:id', async (req, res) => {
-    try {
-        book = await bookModel.findOne({ _id: req.params.id})
+  const book = await bookModel.findOne({ _id: req.params.id})  
+  try {
         res.send(book)
       } catch (err) {
         res.status(500).send(err)

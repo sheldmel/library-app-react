@@ -5,7 +5,7 @@ const Bookimage = (props) => {
     <img
       alt="Logo"
       src={`/images/${props.id}.jpg`}
-      style={{ width: '30%', height: '40%'}}
+      style={{ width: '20%', height: '30%', marginTop: '2%', display: 'inline',  float:'left',}}
     />
   );
 };

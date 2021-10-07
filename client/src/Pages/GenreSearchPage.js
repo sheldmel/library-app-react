@@ -65,12 +65,11 @@ import axios from 'axios';
 
 
 
-export const HomePage = () => {
+export const GenreSearchPage = (props) => {
+    const genre = props.match.params.genre
     const [rows, setRows] = useState([]);
-
     useEffect(() => {
-      setRows([])
-      axios.get('http://localhost:8081/books')
+      axios.get(`http://localhost:8081/book/${genre}`)
       .then((response)=> {
         console.log(response.data)
         const data = response.data
@@ -80,7 +79,7 @@ export const HomePage = () => {
       .catch((err)=> {
         console.log(err)
       })
-    }, []);
+    }, [genre]);
         return (
             <Box
             >
@@ -93,4 +92,4 @@ export const HomePage = () => {
         )
 }
 
-export default HomePage
+export default GenreSearchPage

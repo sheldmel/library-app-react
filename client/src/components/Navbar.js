@@ -1,57 +1,36 @@
 import React, { useState } from 'react';
-import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  NavbarText
-} from 'reactstrap';
+import { Navbar,Nav, Container} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.css';
-
+import Logo from './Logo';
 const Topbar = (props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
   return (
-    <div>
-    <Navbar color="light" light expand="md">
-      <NavbarBrand  style={{marginLeft: '2%'}} href="/">E-library</NavbarBrand>
-      <NavbarToggler onClick={toggle} />
-      <Collapse isOpen={isOpen} navbar>
-        <Nav className="mr-auto" navbar>
-          <NavItem>
-            <NavLink href="/components/">My Books</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
-          </NavItem>
-          <UncontrolledDropdown nav inNavbar>
-            <DropdownToggle nav caret>
-              Book Genres
-            </DropdownToggle>
-            <DropdownMenu right>
-              <DropdownItem>
-                Option 1
-              </DropdownItem>
-              <DropdownItem>
-                Option 2
-              </DropdownItem>
-            </DropdownMenu>
-          </UncontrolledDropdown>
-          <NavItem >
-            <NavLink  href="/login">Sign Out</NavLink>
-          </NavItem>
+    <Navbar bg="light" expand="lg">
+      <Navbar.Brand style= {{marginLeft: '2%'}} href="#home">
+      <img
+          alt=""
+          src="/images/logo.jpg"
+          width="50"
+          height="30"
+          className="d-inline-block align-top"
+        />{' '}
+        E-library</Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="me-auto">
+          <Nav.Link href="/home">Home</Nav.Link>
+          <Nav.Link href="#link">My books</Nav.Link>
+          <Nav.Link href="/login">Sign Out</Nav.Link>
         </Nav>
-      </Collapse>
-    </Navbar>
-  </div>
+        <Nav  style= {{marginRight: '2%'}} className="mr-auto">
+          <Navbar.Text>
+            Welcome, Shelton
+          </Navbar.Text>
+        </Nav>
+      </Navbar.Collapse>
+</Navbar>
   );
 };
 

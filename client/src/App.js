@@ -10,6 +10,7 @@ import LoginPage from "./Pages/LoginPage";
 import CreateAccountPage from "./Pages/CreateAccountPage";
 import HomePage from "./Pages/HomePage";
 import DetailsPage from "./Pages/DetailsPage";
+import GenreSearchPage from "./Pages/GenreSearchPage";
 export default function App() {
   const user = true
 
@@ -22,7 +23,8 @@ export default function App() {
           <Route path="/" exact component={user ? LoginPage : HomePage}/>
           <Route path="/home" exact component={HomePage}/>
           <Route path="/login" exact component={LoginPage}/>
-          <Route path="/home/bookDetails/:bookid" exact component={DetailsPage}/>
+          <Route path="/books/:bookid" exact component={DetailsPage}/>
+          <Route path="/genre/:genre" exact component={GenreSearchPage}/>
         </Switch>
     </Router>
   );
