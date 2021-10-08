@@ -2,41 +2,33 @@ const mongoose = require("mongoose");
 const bcrypt = require('bcrypt');
 
 const UserSchema = new mongoose.Schema({
-  FirstName: {
+  firstName: {
     type: String,
     required: true,
   },
-  LastName: {
+  lastName: {
     type: String,
     required: true,
   },
-  Password: {
+  password: {
     type: String,
     required: true,
   },
-  Email: {
+  email: {
     type: String,
     required: true,
-    //index: true, //Optional if unique is defined
-    unique: [true, "Duplicate Email Not allowed"],
-    trim: true,
-    uppercase: true,
-    validate: function (value) {
-      var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-      return emailRegex.test(value);
-    },
   },
 });
 UserSchema.pre('save', async function(next){
-  if(!this.isModified('Password')){
+  if(!this.isModified('password')){
     next();
   }
   const salt = await bcrypt.genSalt(10);
-  this.Password = await bcrypt.hash(this.Password, salt);
+  this.password = await bcrypt.hash(this.password, salt);
 })
 
 UserSchema.methods.matchPassword= async function (enteredPassword){
-  return await bcrypt.compare(enteredPassword, this.Password)
+  return await bcrypt.compare(enteredPassword, this.password)
 };
 
 const User = mongoose.model("UsersModel", UserSchema);

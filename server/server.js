@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const bodyParser = require("body-parser");
 var cors = require("cors");
+const { notFound, errorHandler } = require('./middleware/errorMiddleware')
 const bookModel = require("./models/BookModel");
 const userModel = require('./models/UserModel');
 const generateToken = require("./utils/generateToken");
@@ -11,7 +12,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 const PORT = process.env.PORT || 8081;
 app.use(cors());
-
+// app.use(notFound)
+// app.use(errorHandler)
 mongoose
   .connect(
     "mongodb+srv://Shelton:test123@cluster0.qusgr.mongodb.net/Library?retryWrites=true&w=majority",
@@ -69,34 +71,48 @@ app.get("/bookSearch/:search", async (req, res) => {
 });
 
 app.post("/register", async (req, res) => {
-  const user = new userModel(req.body);
-  const userExists = await userModel.findOne({Email: req.body.Email})
+  const { firstName, lastName, email, password} = req.body
+  //const user = new userModel({ firstName, lastName, email, password });
+  const userExists = await userModel.findOne({email})
   if(userExists){
-    res.status(400)
-    console.log("User Already Exists")
+    res.send('User exists')
   }
-  try {
-    await user.save();
-    res.send(user.Email);
-  } catch (err) {
-    res.status(500).send(err);
+  console.log(email);
+  const user = await userModel.create({
+    firstName, 
+    lastName, 
+    email, 
+    password 
+  })
+  if (user){
+    res.json({
+      _id: user._id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      token: generateToken(user._id)
+    })
+  }else{
+    res.send('something went wrong')
   }
+
 });
 
 app.post("/login", async (req, res) => {
-  const user = await userModel.findOne({Email: req.body.Email})
+  const user = await userModel.findOne({email: req.body.email})
   console.log(user)
-  try {
-    if(user && (await user.matchPassword(req.body.Password))){
+    if(user && (await user.matchPassword(req.body.password))){
       res.json({
         _id: user._id,
-        Email: user.Email,
-        Token: generateToken(user._id)
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        token: generateToken(user._id)
       })
     }
-  } catch (err) {
-    res.status(500).send(err);
-  }
+    else{
+    res.send('Invalid')
+    }
 });
 
 app.post("/book", async (req, res) => {
@@ -106,6 +122,7 @@ app.post("/book", async (req, res) => {
     res.send(book);
   } catch (err) {
     res.status(500).send(err);
+    console.log(err)
   }
 });
 app.get("/books/:id", async (req, res) => {
