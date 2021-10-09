@@ -3,8 +3,8 @@ import { Navbar, Nav, Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import Logo from "./Logo";
 import { useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux'
-import { logout} from '../actions/userActions'
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../actions/userActions";
 
 const Topbar = (props) => {
   const history = useHistory();
@@ -12,13 +12,13 @@ const Topbar = (props) => {
   //const user = localStorage.getItem("userInfo")
   const toggle = () => setIsOpen(!isOpen);
   const dispatch = useDispatch();
-  const userLogin = useSelector(state => state.userLogin)
-  const {userInfo} = userLogin
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
 
   const logoutHandler = () => {
-    dispatch(logout())
-    history.push('/login')
-  }
+    dispatch(logout());
+    history.push("/login");
+  };
   return (
     <Navbar bg="light" expand="lg">
       <Navbar.Brand style={{ marginLeft: "2%" }}>
@@ -35,7 +35,7 @@ const Topbar = (props) => {
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
           <Nav.Link href="/home">Home</Nav.Link>
-          <Nav.Link href="#link">My books</Nav.Link>
+          <Nav.Link href="/mybooks">My books</Nav.Link>
           <Nav.Link onClick={logoutHandler}>Sign Out</Nav.Link>
         </Nav>
         <Nav style={{ marginRight: "2%" }} className="mr-auto">

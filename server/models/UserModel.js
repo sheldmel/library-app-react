@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 
 const UserSchema = new mongoose.Schema({
   firstName: {
@@ -18,17 +18,22 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  books: [
+    {
+      type: String,
+    },
+  ],
 });
-UserSchema.pre('save', async function(next){
-  if(!this.isModified('password')){
+UserSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
     next();
   }
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-})
+});
 
-UserSchema.methods.matchPassword= async function (enteredPassword){
-  return await bcrypt.compare(enteredPassword, this.password)
+UserSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
 };
 
 const User = mongoose.model("UsersModel", UserSchema);

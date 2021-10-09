@@ -1,7 +1,6 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import { Box } from "@material-ui/core";
-import Logo from "../components/Logo";
 import { Link } from "react-router-dom";
 import Topbar from "../components/Navbar";
 import Searchbar from "../components/Searchbar";
@@ -13,10 +12,46 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import ErrorMessage from "../components/ErrorMessage";
 
 function BasicTable(props) {
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+  const _id = userInfo._id;
   const rows = props.rows;
-
+  const error = props.error;
+  const setError = props.setError;
+  const userBooks = props.userBooks;
+  const addBook = (id) => {
+    if (userBooks.includes(id)) {
+      setError("Book is already in your list.");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+    } else if (userBooks.length > 5) {
+      console.log("list full");
+      setError("Your list is full. Cannot add a new book");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+    } else {
+      const books = userBooks;
+      books.push(id);
+      axios
+        .post("http://localhost:8081/updateUserBooks", {
+          _id,
+          books,
+        })
+        .then((response) => {
+          console.log(response.data);
+          setError("Book was added successfully");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
   return (
     <TableContainer
       style={{ marginLeft: "4%", width: "80%" }}
@@ -46,7 +81,9 @@ function BasicTable(props) {
               <TableCell align="right">{row.bookAuthor}</TableCell>
               <TableCell align="right">{row.yearPublished}</TableCell>
               <TableCell align="right">
-                <Button size="sm">Add Book</Button>
+                <Button size="sm" onClick={() => addBook(row._id)}>
+                  Add Book
+                </Button>
               </TableCell>
               <TableCell align="right">
                 <Link to={`/books/${row._id}`}>
@@ -63,6 +100,11 @@ function BasicTable(props) {
 
 export const SearchPage = (props) => {
   const [rows, setRows] = useState("");
+  const [error, setError] = useState("");
+  const [userBooks, setUserBooks] = useState([]);
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+  const id = userInfo._id;
   const search = props.match.params.search;
   useEffect(() => {
     console.log(search);
@@ -81,6 +123,19 @@ export const SearchPage = (props) => {
       .catch((err) => {
         console.log(err);
       });
+    axios
+      .get(`http://localhost:8081/userBooks/${id}`)
+      .then((response) => {
+        console.log(response.data);
+        const data = response.data;
+        {
+          document.title = `E-Library: MyBooks`;
+        }
+        setUserBooks(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [search]);
   return (
     <Box>
@@ -94,11 +149,21 @@ export const SearchPage = (props) => {
         }}
       >
         <Searchbar></Searchbar>
+        {error && (
+          <ErrorMessage style={{ marginTop: "5%" }} variant="success">
+            {error}
+          </ErrorMessage>
+        )}
       </div>
       {rows === "" ? (
         <h2 style={{ margin: "4%" }}>No results were found. </h2>
       ) : (
-        <BasicTable rows={rows}></BasicTable>
+        <BasicTable
+          rows={rows}
+          userBooks={userBooks}
+          error={error}
+          setError={setError}
+        ></BasicTable>
       )}
     </Box>
   );

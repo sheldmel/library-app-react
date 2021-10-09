@@ -6,19 +6,29 @@ import HomePage from "./Pages/HomePage";
 import DetailsPage from "./Pages/DetailsPage";
 import GenreSearchPage from "./Pages/GenreSearchPage";
 import { SearchPage } from "./Pages/SearchPage";
-export default function App() {
-  const user = true;
+import DisplayUserBooksPage from "./Pages/DisplayUserBooksPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
+export default function App() {
   return (
     <Router>
       <Switch>
         <Route path="/create-account" exact component={CreateAccountPage} />
-        <Route path="/" exact component={user ? LoginPage : HomePage} />
-        <Route path="/home" exact component={HomePage} />
+        <ProtectedRoute path="/" exact component={HomePage} />
+        <ProtectedRoute path="/home" exact component={HomePage} />
         <Route path="/login" exact component={LoginPage} />
-        <Route path="/books/:bookid" exact component={DetailsPage} />
-        <Route path="/genre/:genre" exact component={GenreSearchPage} />
-        <Route path="/book/:search" exact component={SearchPage} />
+        <ProtectedRoute path="/books/:bookid" exact component={DetailsPage} />
+        <ProtectedRoute
+          path="/genre/:genre"
+          exact
+          component={GenreSearchPage}
+        />
+        <ProtectedRoute path="/book/:search" exact component={SearchPage} />
+        <ProtectedRoute
+          path="/mybooks"
+          exact
+          component={DisplayUserBooksPage}
+        />
       </Switch>
     </Router>
   );

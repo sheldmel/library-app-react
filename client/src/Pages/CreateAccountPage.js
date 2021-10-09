@@ -2,24 +2,18 @@ import React, { Component, useEffect, useState } from "react";
 import {
   Box,
   Button,
-  Container,
-  Grid,
   Link,
-  TextField,
   Typography,
-  makeStyles,
 } from "@material-ui/core";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
-import { Link as RouterLink, useNavigate, useLocation } from "react-router-dom";
+import { Link as RouterLink} from "react-router-dom";
 import Logo from "../components/Logo";
-import axios from "axios";
-import Loading from "../components/Loading";
 import ErrorMessage from "../components/ErrorMessage";
-import { useDispatch, useSelector } from 'react-redux'
-import { register } from "../actions/userActions"
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../actions/userActions";
 import { useHistory } from "react-router-dom";
 
 export const CreateAccountPage = () => {
@@ -27,13 +21,13 @@ export const CreateAccountPage = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState(null)
+  const [message, setMessage] = useState(null);
   const [password2, setPassword2] = useState("");
   const dispatch = useDispatch();
-  const userRegister = useSelector(state => state.userRegister)
+  const userRegister = useSelector((state) => state.userRegister);
   const userLogin = useSelector((state) => state.userLogin);
-  const {loading, error, userInfo } = userRegister
-  const { userLoginInfo } = userLogin
+  const { loading, error, userInfo } = userRegister;
+  const { userLoginInfo } = userLogin;
   const history = useHistory();
 
   useEffect(() => {
@@ -88,7 +82,7 @@ export const CreateAccountPage = () => {
       setMessage("Passwords do not match");
       return;
     }
-    dispatch(register(firstName, lastName, email, password))
+    dispatch(register(firstName, lastName, email, password));
   };
 
   return (
@@ -162,15 +156,15 @@ export const CreateAccountPage = () => {
           </FloatingLabel>
         </Form.Group>
         <div my={2} style={{ textAlign: "center", margin: "4%" }}>
-            <Button
-              color="primary"
-              size="large"
-              type="submit"
-              variant="contained"
-              onClick={submitHandler}
-            >
-              Create Account
-            </Button>
+          <Button
+            color="primary"
+            size="large"
+            type="submit"
+            variant="contained"
+            onClick={submitHandler}
+          >
+            Create Account
+          </Button>
         </div>
       </Form>
       <Typography color="textSecondary" variant="body1">
