@@ -8,6 +8,8 @@ import GenreSearchPage from "./Pages/GenreSearchPage";
 import { SearchPage } from "./Pages/SearchPage";
 import DisplayUserBooksPage from "./Pages/DisplayUserBooksPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AddBookPage from "./Pages/AddBookPage";
+import EditBookPage from "./Pages/EditBookPage"
 
 export default function App() {
   return (
@@ -29,6 +31,8 @@ export default function App() {
           exact
           component={DisplayUserBooksPage}
         />
+        <ProtectedRoute path="/addBook" exact component={AddBookPage} />
+        <ProtectedRoute path="/editBook/:bookid" exact component={EditBookPage} />
       </Switch>
     </Router>
   );

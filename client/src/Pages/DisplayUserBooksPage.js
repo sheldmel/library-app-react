@@ -10,7 +10,8 @@ import { InputGroup } from "reactstrap";
 import Bookimage from "../components/Image";
 import Topbar from "../components/Navbar";
 import { useSelector } from "react-redux";
-
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 const DetailsPage = (props) => {
   const { id } = props;
   const { books } = props;
@@ -60,28 +61,25 @@ const DetailsPage = (props) => {
 
   return (
     <div>
-      <div style={{ marginLeft: "2%" }}>
-        <div>
-          <InputGroup style={{ width: "100%" }}></InputGroup>
-        </div>
-        <div>
-          <Bookimage id={id}></Bookimage>
-
-          <div className={classes.h2}>
+      <Row style={{ marginTop: "2%"}}>
+          <Col sm={3}>
+          <div>
+            <Bookimage id={book.bookImage} />
+          </div>
+          </Col>
+          <Col area-style sm={6}>
             <h1>
-              {book.bookTitle} ({book.yearPublished}){" "}
-              <Button size="sm" onClick={() => deleteBook(id)}>
-                Remove Book
-              </Button>
+              {book.bookTitle} ({book.yearPublished})
             </h1>
             <h5 className={classes.h5}> By {book.bookAuthor}</h5>
             <h6 className={classes.h6}>Genre: {book.bookGenre}</h6>
+            <Button size="sm" style={{marginLeft: '2%'}} onClick={() => deleteBook(id)}>
+                Remove Book
+              </Button>
             <hr />
             <p> {book.bookDescription}</p>
-          </div>
-          <br></br>
-        </div>
-      </div>
+          </Col>
+        </Row>
       <hr width="100%"></hr>
     </div>
   );

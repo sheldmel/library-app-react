@@ -19,10 +19,43 @@ function BasicTable(props) {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
   const _id = userInfo._id;
+  const isAdmin = userInfo.isAdmin;
   const rows = props.rows;
   const error = props.error;
   const setError = props.setError;
   const userBooks = props.userBooks;
+
+  function NonAdminbutton(props) {
+    return (
+      <Button size="sm" onClick={() => addBook(props.id)}>
+        Add Book
+      </Button>
+    );
+  }
+
+  function Adminbutton(props) {
+    return (
+      <Link to={`/editBook/${props.id}`}>
+        <Button size="sm">Edit Book</Button>
+      </Link>
+    );
+  }
+
+  function NonAdminbutton2(props) {
+    return (
+      <Link to={`/books/${props.id}`}>
+        <Button size="sm">View Details</Button>
+      </Link>
+    );
+  }
+  function Adminbutton2(props) {
+    return (
+      <Button size="sm" onClick={() => deleteBook(props.id)}>
+        Delete book
+      </Button>
+    );
+  }
+
   const addBook = (id) => {
     if (userBooks.includes(id)) {
       setError("Book is already in your list.");
@@ -51,6 +84,13 @@ function BasicTable(props) {
           console.log(err);
         });
     }
+  };
+
+  const deleteBook = (id) => {
+    setError("you clicked on delete book");
+    setTimeout(() => {
+      setError("");
+    }, 3000);
   };
   return (
     <TableContainer
@@ -81,14 +121,18 @@ function BasicTable(props) {
               <TableCell align="right">{row.bookAuthor}</TableCell>
               <TableCell align="right">{row.yearPublished}</TableCell>
               <TableCell align="right">
-                <Button size="sm" onClick={() => addBook(row._id)}>
-                  Add Book
-                </Button>
+              {isAdmin ? (
+                  <Adminbutton id={row._id} />
+                ) : (
+                  <NonAdminbutton id={row._id} />
+                )}
               </TableCell>
               <TableCell align="right">
-                <Link to={`/books/${row._id}`}>
-                  <Button size="sm">View Details</Button>
-                </Link>
+              {isAdmin ? (
+                  <Adminbutton2 id={row._id} />
+                ) : (
+                  <NonAdminbutton2 id={row._id} />
+                )}
               </TableCell>
             </TableRow>
           ))}

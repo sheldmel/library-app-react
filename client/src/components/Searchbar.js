@@ -33,6 +33,10 @@ const Searchbar = (props) => {
     history.push(`/book/${search}`);
     setSearch("");
   };
+  const handleDropdownClick = (genre) => {
+    history.push(`/genre/${genre}`);
+    setSearch("");
+  };
   return (
     <div>
       <InputGroup style={{ width: "100%" }}>
@@ -49,12 +53,9 @@ const Searchbar = (props) => {
         <UncontrolledDropdown inNavbar style={{ marginLeft: "3%" }}>
           <DropdownToggle caret>Book Genres</DropdownToggle>
           <DropdownMenu right>
-            <Link to={"/genre/Fantasy"}>
-              <DropdownItem>Fantasy</DropdownItem>
-            </Link>
-            <Link to={"/genre/Novel"}>
-              <DropdownItem>Novel</DropdownItem>
-            </Link>
+              <DropdownItem onClick={()=>handleDropdownClick('Fantasy')}>Fantasy</DropdownItem>
+              <DropdownItem onClick={()=>handleDropdownClick('Novel')}>Novel</DropdownItem>
+              <DropdownItem onClick={()=>handleDropdownClick('Fiction')}>Fiction</DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>
       </InputGroup>

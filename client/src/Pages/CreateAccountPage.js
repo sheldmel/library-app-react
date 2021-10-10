@@ -78,11 +78,14 @@ export const CreateAccountPage = () => {
       );
       return;
     }
-    if (password != password2) {
-      setMessage("Passwords do not match");
+    if (password !== password2) {
+      setMessage("Passwords do not match"); 
+      console.log(password)     
+      console.log(password2) 
       return;
     }
     dispatch(register(firstName, lastName, email, password));
+    history.push('/login')
   };
 
   return (

@@ -7,7 +7,9 @@ import {
 import Bookimage from "../components/Image";
 import Topbar from "../components/Navbar";
 import Searchbar from "../components/Searchbar";
-
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import Container from "react-bootstrap/Container"
 export const DetailsPage = (props) => {
   const id = props.match.params.bookid;
   const [book, setBook] = useState([]);
@@ -32,12 +34,15 @@ export const DetailsPage = (props) => {
     <Box>
       <Topbar></Topbar>
 
-      <div style={{ marginLeft: "2%", padding: "2%" }}>
+      <div style={{ margin: "2%", padding: "2%" }}>
         <Searchbar></Searchbar>
-        <div>
-          <Bookimage id={id}></Bookimage>
-
-          <div className={classes.h2}>
+        <Row style={{ marginTop: "2%"}}>
+          <Col sm={3}>
+          <div>
+            <Bookimage id={book.bookImage} />
+          </div>
+          </Col>
+          <Col area-style sm={6}>
             <h1>
               {book.bookTitle} ({book.yearPublished})
             </h1>
@@ -45,8 +50,9 @@ export const DetailsPage = (props) => {
             <h6 className={classes.h6}>Genre: {book.bookGenre}</h6>
             <hr />
             <p> {book.bookDescription}</p>
-          </div>
-        </div>
+          </Col>
+        </Row>
+
       </div>
     </Box>
   );
@@ -54,8 +60,6 @@ export const DetailsPage = (props) => {
 
 const useStyles = makeStyles({
   h2: {
-    display: "inline-block",
-    float: "left",
     margin: "2%",
   },
   h5: {
@@ -65,7 +69,6 @@ const useStyles = makeStyles({
     marginLeft: "2%",
   },
   p: {
-    float: "left",
     marginLeft: "2%",
   },
   button: {

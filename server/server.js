@@ -93,8 +93,10 @@ app.post("/register", async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       books: user.books,
+      isAdmin: user.isAdmin,
       token: generateToken(user._id),
     });
+    res.end();
   } else {
     res.send("something went wrong");
   }
@@ -110,6 +112,7 @@ app.post("/login", async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       books: user.books,
+      isAdmin: user.isAdmin,
       token: generateToken(user._id),
     });
   } else {
@@ -117,10 +120,43 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/book", async (req, res) => {
+app.post("/addBook", async (req, res) => {
   const book = new bookModel(req.body);
   try {
     await book.save();
+    res.send(book);
+  } catch (err) {
+    res.status(500).send(err);
+    console.log(err);
+  }
+});
+
+app.post("/updateBook/:id", async (req, res) => {
+  const {
+    bookTitle,
+    bookDescription,
+    bookGenre,
+    yearPublished,
+    bookAuthor,
+    bookImage,
+  } = req.body;
+  const book = await bookModel.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      $set: {
+        bookTitle: bookTitle,
+        bookDescription: bookDescription,
+        bookGenre: bookGenre,
+        yearPublished: yearPublished,
+        bookAuthor: bookAuthor,
+        bookImage: bookImage,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+  try {
     res.send(book);
   } catch (err) {
     res.status(500).send(err);

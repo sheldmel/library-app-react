@@ -4,16 +4,14 @@ const Bookimage = (props) => {
   return (
     <img
       alt="Logo"
-      src={`/images/${props.id}.jpg`}
+      src={props.id}
       style={{
-        width: "20%",
-        height: "30%",
-        //marginTop: "2%",
+        width: "70%",
+        height: "80%",
         margin: "2%",
         display: "inline",
-        float: "left",
         maxHeight: "500px",
-        maxWidth: "500px",
+        maxWidth: "400px",
       }}
     />
   );
