@@ -168,11 +168,10 @@ export const EditBookPage = (props) => {
             <Form.Group as={Col} controlId="formGridGenre">
               <Form.Label>Genre</Form.Label>
               <Form.Select
-                defaultValue=" "
+                defaultValue={bookGenre}
                 placeholder="Select Genre"
                 onChange={handleGenreChange}
               >
-                <option value="">Select Genre</option>
                 <option value="Fantasy">Fantasy</option>
                 <option value="Fiction">Fiction</option>
                 <option value="Novel">Novel</option>

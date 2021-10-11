@@ -14,7 +14,7 @@ import { useHistory } from "react-router-dom";
 export const AddBookPage = (props) => {
   const [bookTitle, setBookTitle] = useState("");
   const [bookDescription, setBookDescription] = useState("");
-  const [bookGenre, setBookGenre] = useState("");
+  const [bookGenre, setBookGenre] = useState("Fantasy");
   const [bookAuthor, setBookAuthor] = useState("");
   const [bookImage, setBookImage] = useState("");
   const [yearPublished, setYearPublished] = useState("");

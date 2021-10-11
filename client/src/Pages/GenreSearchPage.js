@@ -24,7 +24,9 @@ function BasicTable(props) {
   const error = props.error;
   const setError = props.setError;
   const userBooks = props.userBooks;
-
+  const toggleDb = props.toggleDb
+  const dbUpdated = props.dbUpdated
+  
   function NonAdminbutton(props) {
     return (
       <Button size="sm" onClick={() => addBook(props.id)}>
@@ -86,11 +88,19 @@ function BasicTable(props) {
     }
   };
 
-  const deleteBook = (id) => {
-    setError("you clicked on delete book");
-    setTimeout(() => {
-      setError("");
-    }, 3000);
+  const deleteBook = (id, name) => {
+    axios
+    .post(`http://localhost:8081/deleteBook/${id}`)
+    .then(() => {
+      setError( `${name} was deleted`);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+      toggleDb(!dbUpdated)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   };
 
   return (
@@ -151,6 +161,8 @@ export const GenreSearchPage = (props) => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
   const id = userInfo._id;
+  const [dbUpdated, toggleDb] = useState(false)
+
   useEffect(() => {
     document.title = `E-Library: ${genre}`;
     axios
@@ -176,7 +188,7 @@ export const GenreSearchPage = (props) => {
       .catch((err) => {
         console.log(err);
       });
-  }, [genre]);
+  }, [genre, dbUpdated]);
   return (
     <Box>
       <Topbar></Topbar>
@@ -200,6 +212,7 @@ export const GenreSearchPage = (props) => {
         userBooks={userBooks}
         error={error}
         setError={setError}
+        dbUpdated={dbUpdated}
       ></BasicTable>
     </Box>
   );

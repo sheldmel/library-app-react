@@ -24,7 +24,9 @@ function BasicTable(props) {
   const error = props.error;
   const setError = props.setError;
   const userBooks = props.userBooks;
-
+  const toggleDb = props.toggleDb
+  const dbUpdated = props.dbUpdated
+  
   function NonAdminbutton(props) {
     return (
       <Button size="sm" onClick={() => addBook(props.id)}>
@@ -49,9 +51,10 @@ function BasicTable(props) {
     );
   }
   function Adminbutton2(props) {
+
     return (
-      <Button size="sm" onClick={() => deleteBook(props.id)}>
-        Delete book
+      <Button size="sm" onClick={() => deleteBook(props.id, props.name)}>
+        Delete Book
       </Button>
     );
   }
@@ -85,11 +88,19 @@ function BasicTable(props) {
     }
   };
 
-  const deleteBook = (id) => {
-    setError("you clicked on delete book");
-    setTimeout(() => {
-      setError("");
-    }, 3000);
+  const deleteBook = (id, name) => {
+    axios
+    .post(`http://localhost:8081/deleteBook/${id}`)
+    .then(() => {
+      setError( `${name} was deleted`);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+      toggleDb(!dbUpdated)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   };
 
   return (
@@ -129,7 +140,7 @@ function BasicTable(props) {
               </TableCell>
               <TableCell align="right">
                 {isAdmin ? (
-                  <Adminbutton2 id={row._id} />
+                  <Adminbutton2 id={row._id} name={row.bookTitle}/>
                 ) : (
                   <NonAdminbutton2 id={row._id} />
                 )}
@@ -149,6 +160,7 @@ export const HomePage = () => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
   const id = userInfo._id;
+  const [dbUpdated, toggleDb] = useState(false)
   useEffect(() => {
     document.title = "E-Library";
     axios
@@ -174,7 +186,7 @@ export const HomePage = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [dbUpdated]);
   return (
     <Box>
       <Topbar></Topbar>
@@ -194,9 +206,11 @@ export const HomePage = () => {
         )}
       </div>
       <BasicTable
+        toggleDb={toggleDb}
         rows={rows}
         userBooks={userBooks}
         error={error}
+        dbUpdated={dbUpdated}
         setError={setError}
       ></BasicTable>
     </Box>

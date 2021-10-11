@@ -131,6 +131,16 @@ app.post("/addBook", async (req, res) => {
   }
 });
 
+app.post("/deleteBook/:id", async (req, res) => {
+  try {
+    book = await bookModel.deleteOne({ _id: req.params.id });
+    res.send(book.bookTitle);
+  } catch (err) {
+    res.status(500).send(err);
+    console.log(err);
+  }
+});
+
 app.post("/updateBook/:id", async (req, res) => {
   const {
     bookTitle,
