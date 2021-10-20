@@ -12,6 +12,7 @@ Front-End:
 * React-Bootstrap
 * React-Redux
 * Material-UI
+* Axios
 
 Back-End:
 * Node JS
