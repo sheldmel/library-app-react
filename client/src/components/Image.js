@@ -6,12 +6,12 @@ const Bookimage = (props) => {
       alt="Logo"
       src={props.id}
       style={{
-        width: "70%",
-        height: "80%",
-        margin: "2%",
+        width: "80%",
+        height: "100%",
+        margin: "3%",
         display: "inline",
-        maxHeight: "500px",
-        maxWidth: "400px",
+        maxHeight: "400px",
+        maxWidth: "300px",
       }}
     />
   );
