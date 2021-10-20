@@ -68,12 +68,12 @@ const DetailsPage = (props) => {
           </div>
           </Col>
           <Col area-style sm={6}>
-            <h1>
+            <h1 className={classes.h1}>
               {book.bookTitle} ({book.yearPublished})
             </h1>
             <h5 className={classes.h5}> By {book.bookAuthor}</h5>
             <h6 className={classes.h6}>Genre: {book.bookGenre}</h6>
-            <Button size="sm" style={{marginLeft: '2%'}} onClick={() => deleteBook(id)}>
+            <Button size="sm" style={{marginLeft: '4%'}} onClick={() => deleteBook(id)}>
                 Remove Book
               </Button>
             <hr />
@@ -110,37 +110,40 @@ const DisplayUserBooksPage = () => {
   return (
     <Box>
       <Topbar></Topbar>
-      {books.map((id) => (
-        <DetailsPage
-          id={id}
-          books={books}
-          dbUpdated={dbUpdated}
-          setdbUpdated={setdbUpdated}
-        />
-      ))}
+      {books.length == 0 ? (
+        <h1 style={{ margin: "5%" }}>You have no books in your List</h1>
+      ) : (
+        books.map((id) => (
+          <DetailsPage
+            id={id}
+            books={books}
+            dbUpdated={dbUpdated}
+            setdbUpdated={setdbUpdated}
+          />
+        ))
+      )}
     </Box>
   );
 };
 
 const useStyles = makeStyles({
-  h2: {
-    display: "inline-block",
-    float: "left",
-    margin: "2%",
+  h1: {
+    marginLeft: "2%",
   },
   h5: {
-    marginLeft: "2%",
+    marginLeft: "4%",
   },
   h6: {
-    marginLeft: "2%",
+    marginLeft: "4%",
   },
   p: {
     float: "left",
-    marginLeft: "2%",
+    marginLeft: "4%",
   },
   button: {
     border: 0,
     borderRadius: 50,
+    marginLeft: "2%"
   },
 });
 
