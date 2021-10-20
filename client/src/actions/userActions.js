@@ -19,7 +19,7 @@ export const login = (email, password) => async (dispatch) => {
     dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
     localStorage.setItem("userInfo", JSON.stringify(data));
   } else {
-    dispatch({ type: USER_LOGIN_FAIL, payload: "Invalid Email or Password" });
+    dispatch({ type: USER_LOGIN_FAIL, payload: "Invalid Email or Password. Please Try Again !" });
   }
 };
 
