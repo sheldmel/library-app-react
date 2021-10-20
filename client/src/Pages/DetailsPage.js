@@ -43,7 +43,7 @@ export const DetailsPage = (props) => {
           </div>
           </Col>
           <Col area-style sm={6}>
-            <h1>
+            <h1 className={classes.h1}>
               {book.bookTitle} ({book.yearPublished})
             </h1>
             <h5 className={classes.h5}> By {book.bookAuthor}</h5>
@@ -59,17 +59,18 @@ export const DetailsPage = (props) => {
 };
 
 const useStyles = makeStyles({
-  h2: {
-    margin: "2%",
+  h1: {
+    marginLeft: "2%",
   },
   h5: {
-    marginLeft: "2%",
+    marginLeft: "4%",
   },
   h6: {
-    marginLeft: "2%",
+    marginLeft: "4%",
   },
   p: {
-    marginLeft: "2%",
+    float: "left",
+    marginLeft: "4%",
   },
   button: {
     border: 0,
