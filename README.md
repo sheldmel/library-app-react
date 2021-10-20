@@ -18,6 +18,8 @@ Back-End:
 * Express JS
 * Bcrypt
 * Json Web Token
+* Mongo DB 
+* Mongoose
 
 
 ## Setup
