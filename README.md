@@ -4,7 +4,7 @@
 * [Setup](#setup)
 
 ## General info
-This Project is a app that allows users to login, register and view books. They can also search for book by name genre or author and a book to their list.The application also has an admin who can perform CRUD operations on books. All data is stored on mongoDB using atlas.
+This Project is a app that allows users to login, register and view books. They can also search for book by name genre or author and add / remove a book from their list.The application also has an admin who can perform CRUD operations on books. All data is stored on mongoDB using atlas.
 	
 ## Technologies
 Front-End:
