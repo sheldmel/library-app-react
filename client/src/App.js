@@ -9,7 +9,7 @@ import { SearchPage } from "./Pages/SearchPage";
 import DisplayUserBooksPage from "./Pages/DisplayUserBooksPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AddBookPage from "./Pages/AddBookPage";
-import EditBookPage from "./Pages/EditBookPage"
+import EditBookPage from "./Pages/EditBookPage";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
 
 export default function App() {
@@ -33,7 +33,11 @@ export default function App() {
           component={DisplayUserBooksPage}
         />
         <ProtectedAdminRoute path="/addBook" exact component={AddBookPage} />
-        <ProtectedAdminRoute path="/editBook/:bookid" exact component={EditBookPage} />
+        <ProtectedAdminRoute
+          path="/editBook/:bookid"
+          exact
+          component={EditBookPage}
+        />
       </Switch>
     </Router>
   );

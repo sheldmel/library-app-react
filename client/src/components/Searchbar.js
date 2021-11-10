@@ -1,28 +1,19 @@
 import {
   InputGroup,
   InputGroupAddon,
-  InputGroupText,
   Input,
   Button,
 } from "reactstrap";
 import SearchIcon from "@mui/icons-material/Search";
 import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  NavbarText,
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import { Link } from "react-router-dom";
 import React, { useState } from "react";
+
 const Searchbar = (props) => {
   const history = useHistory();
   const [search, setSearch] = useState("");
@@ -41,6 +32,8 @@ const Searchbar = (props) => {
     <div>
       <InputGroup style={{ width: "100%" }}>
         <Input
+          style={{boxShadow: 'none', border: '0.1px ridge'}}
+          shadow-none
           value={search}
           onChange={handleInput}
           placeholder="Search book by name or author"

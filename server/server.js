@@ -10,13 +10,16 @@ const generateToken = require("./utils/generateToken");
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+const dotenv = require('dotenv');
+dotenv.config();
+
 const PORT = process.env.PORT || 8081;
 app.use(cors());
 // app.use(notFound)
 // app.use(errorHandler)
 mongoose
   .connect(
-    "mongodb+srv://Shelton:test123@cluster0.qusgr.mongodb.net/Library?retryWrites=true&w=majority",
+    process.env.MONGO_URL,
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
