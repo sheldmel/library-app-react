@@ -12,12 +12,15 @@ Front-End:
 * React-Bootstrap
 * React-Redux
 * Material-UI
+* Axios
 
 Back-End:
 * Node JS
 * Express JS
 * Bcrypt
 * Json Web Token
+* Mongo DB 
+* Mongoose
 
 
 ## Setup
