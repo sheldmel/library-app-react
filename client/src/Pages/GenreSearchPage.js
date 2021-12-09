@@ -11,7 +11,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import axios from "axios";
+import { updateUserBooks, displayUserBooks, displayBooksByGenre } from "../api/utils";
 import { useSelector } from "react-redux";
 import ErrorMessage from "../components/ErrorMessage";
 
@@ -21,7 +21,6 @@ function BasicTable(props) {
   const _id = userInfo._id;
   const isAdmin = userInfo.isAdmin;
   const rows = props.rows;
-  const error = props.error;
   const setError = props.setError;
   const userBooks = props.userBooks;
   const toggleDb = props.toggleDb
@@ -73,11 +72,7 @@ function BasicTable(props) {
     } else {
       const books = userBooks;
       books.push(id);
-      axios
-        .post("http://localhost:8081/updateUserBooks", {
-          _id,
-          books,
-        })
+      updateUserBooks(_id, books)
         .then((response) => {
           console.log(response.data);
           setError("Book was added successfully");
@@ -89,8 +84,7 @@ function BasicTable(props) {
   };
 
   const deleteBook = (id, name) => {
-    axios
-    .post(`http://localhost:8081/deleteBook/${id}`)
+    deleteBook(id)
     .then(() => {
       setError( `${name} was deleted`);
       setTimeout(() => {
@@ -165,8 +159,7 @@ export const GenreSearchPage = (props) => {
 
   useEffect(() => {
     document.title = `E-Library: ${genre}`;
-    axios
-      .get(`http://localhost:8081/book/${genre}`)
+    displayBooksByGenre(genre)
       .then((response) => {
         console.log(response.data);
         const data = response.data;
@@ -175,14 +168,11 @@ export const GenreSearchPage = (props) => {
       .catch((err) => {
         console.log(err);
       });
-    axios
-      .get(`http://localhost:8081/userBooks/${id}`)
+    displayUserBooks(id)
       .then((response) => {
         console.log(response.data);
         const data = response.data;
-        {
-          document.title = `E-Library: MyBooks`;
-        }
+        document.title = `E-Library: MyBooks`;
         setUserBooks(data);
       })
       .catch((err) => {

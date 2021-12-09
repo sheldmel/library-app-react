@@ -1,9 +1,9 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Link, Typography } from "@material-ui/core";
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Logo from "../components/Logo";
-import { Link as RouterLink, useNavigate, useLocation } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../actions/userActions";
@@ -11,16 +11,15 @@ import Loading from "../components/Loading";
 import ErrorMessage from "../components/ErrorMessage";
 
 export const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("john@xyz.com");
+  const [password, setPassword] = useState("Test123");
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
   const { loading, error, userInfo } = userLogin;
   const history = useHistory();
-  //const [user, setUser] = useState(null)
+
   useEffect(() => {
     document.title = "Login";
-    //setUser(localStorage.getItem('userInfo'))
     if (userInfo) {
       history.push(`/home`);
     }
@@ -36,7 +35,6 @@ export const LoginPage = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     dispatch(login(email, password));
-    // history.push(`/home`);
   };
 
   return (
@@ -62,6 +60,7 @@ export const LoginPage = () => {
               onChange={handleEmailChange}
               type="email"
               placeholder="name@example.com"
+              value={email}
             />
           </FloatingLabel>
           <FloatingLabel controlId="floatingPassword" label="Password">
@@ -69,6 +68,7 @@ export const LoginPage = () => {
               onChange={handlePasswordChange}
               type="password"
               placeholder="Password"
+              value={password}
             />
           </FloatingLabel>
         </Form.Group>
@@ -91,6 +91,8 @@ export const LoginPage = () => {
         </Link>{" "}
       </Typography>
       {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
+      <p>admin email: dmel@yahoo.com</p>
+      <p>password: Test123</p>
     </Box>
   );
 };

@@ -1,15 +1,14 @@
-import React, { Component, useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { Box, makeStyles } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import Bookimage from "../components/Image";
+import { editBook } from "../api/utils";
 import Topbar from "../components/Navbar";
-import Searchbar from "../components/Searchbar";
 import ErrorMessage from "../components/ErrorMessage";
 import { useHistory } from "react-router-dom";
+import { displayBook } from "../api/utils";
 
 export const EditBookPage = (props) => {
   const [bookTitle, setBookTitle] = useState("");
@@ -21,22 +20,18 @@ export const EditBookPage = (props) => {
   const [error, setError] = useState("");
   const history = useHistory();
   const id = props.match.params.bookid;
-  //const [book, setBook] = useState([]);
   useEffect(() => {
-    axios
-      .get(`http://localhost:8081/books/${id}`)
+    displayBook(id)
       .then((response) => {
         console.log(response.data);
         const data = response.data;
-        setBookTitle(data.bookTitle)
-        setBookAuthor(data.bookAuthor)
-        setBookImage(data.bookImage)
-        setBookDescription(data.bookDescription)
-        setYearPublished(data.yearPublished)
-        setBookGenre(data.bookGenre)
-        {
-          document.title = `E-Library: Edit ${data.bookTitle}`;
-        }
+        setBookTitle(data.bookTitle);
+        setBookAuthor(data.bookAuthor);
+        setBookImage(data.bookImage);
+        setBookDescription(data.bookDescription);
+        setYearPublished(data.yearPublished);
+        setBookGenre(data.bookGenre);
+        document.title = `E-Library: Edit ${data.bookTitle}`;
       })
       .catch((err) => {
         console.log(err);
@@ -89,18 +84,18 @@ export const EditBookPage = (props) => {
       return;
     }
     if (bookGenre === "") {
-        setError("The genre cannot be empty");
-        return;
-      }
-    const { data } = await axios.post(`http://localhost:8081/updateBook/${id}`, {
+      setError("The genre cannot be empty");
+      return;
+    }
+    editBook(
       bookTitle,
       bookDescription,
       bookGenre,
       yearPublished,
       bookAuthor,
       bookImage,
-    });
-    console.log(data);
+      id
+    );
     history.push("/home");
   };
 

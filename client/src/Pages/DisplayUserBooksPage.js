@@ -1,17 +1,17 @@
-import React, { Component, useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import {
   Box,
-
   makeStyles,
 } from "@material-ui/core";
+import { displayUserBooks, updateUserBooks, displayBook } from "../api/utils";
 import Button from "react-bootstrap/Button";
-import { InputGroup } from "reactstrap";
 import Bookimage from "../components/Image";
 import Topbar from "../components/Navbar";
 import { useSelector } from "react-redux";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+
+
 const DetailsPage = (props) => {
   const { id } = props;
   const { books } = props;
@@ -25,8 +25,7 @@ const DetailsPage = (props) => {
 
   useEffect(() => {
     setBook([]);
-    axios
-      .get(`http://localhost:8081/books/${id}`)
+    displayBook(id)
       .then((response) => {
         console.log(response.data);
         const data = response.data;
@@ -45,11 +44,7 @@ const DetailsPage = (props) => {
         userBooks.splice(i, 1);
       }
     }
-    axios
-      .post("http://localhost:8081/updateUserBooks", {
-        _id,
-        books,
-      })
+    updateUserBooks(_id, userBooks)
       .then((response) => {
         console.log(response.data);
         setdbUpdated(!dbUpdated);
@@ -93,14 +88,11 @@ const DisplayUserBooksPage = () => {
   const id = userInfo._id;
   useEffect(() => {
     setBooks([]);
-    axios
-      .get(`http://localhost:8081/userBooks/${id}`)
+    displayUserBooks(id)
       .then((response) => {
         console.log(response.data);
         const data = response.data;
-        {
-          document.title = `E-Library: MyBooks`;
-        }
+        document.title = `E-Library: MyBooks`;
         setBooks(data);
       })
       .catch((err) => {
@@ -110,7 +102,7 @@ const DisplayUserBooksPage = () => {
   return (
     <Box>
       <Topbar></Topbar>
-      {books.length == 0 ? (
+      {books.length === 0 ? (
         <h1 style={{ margin: "5%" }}>You have no books in your List</h1>
       ) : (
         books.map((id) => (

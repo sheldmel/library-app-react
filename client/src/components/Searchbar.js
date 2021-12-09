@@ -20,7 +20,7 @@ const Searchbar = (props) => {
   const handleInput = (event) => {
     setSearch(event.target.value);
   };
-  const handleClick = (event) => {
+  const handleClick = () => {
     history.push(`/book/${search}`);
     setSearch("");
   };

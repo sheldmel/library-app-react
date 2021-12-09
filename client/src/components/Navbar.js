@@ -1,16 +1,12 @@
-import React, { useState } from "react";
-import { Navbar, Nav, Container } from "react-bootstrap";
+import React from "react";
+import { Navbar, Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
-import Logo from "./Logo";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../actions/userActions";
 
 const Topbar = (props) => {
   const history = useHistory();
-  const [isOpen, setIsOpen] = useState(false);
-  //const user = localStorage.getItem("userInfo")
-  const toggle = () => setIsOpen(!isOpen);
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;

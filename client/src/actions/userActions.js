@@ -7,19 +7,19 @@ import {
   USER_REGISTER_SUCCESS,
   USER_REGISTER_FAIL,
 } from "../constants/userConstants";
-import axios from "axios";
+import { loginUser, registerUser } from "../api/utils";
 
 export const login = (email, password) => async (dispatch) => {
   dispatch({ type: USER_LOGIN_REQUEST });
-  const { data } = await axios.post("http://localhost:8081/login", {
-    email,
-    password,
-  });
-  if (data != "Invalid") {
+  const { data } = await loginUser(email, password);
+  if (data !== "Invalid") {
     dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
     localStorage.setItem("userInfo", JSON.stringify(data));
   } else {
-    dispatch({ type: USER_LOGIN_FAIL, payload: "Invalid Email or Password. Please Try Again !" });
+    dispatch({
+      type: USER_LOGIN_FAIL,
+      payload: "Invalid Email or Password. Please Try Again !",
+    });
   }
 };
 
@@ -28,20 +28,18 @@ export const logout = () => async (dispatch) => {
   dispatch({ type: USER_LOGOUT });
 };
 
-export const register = (firstName, lastName, email, password) => async (dispatch) => {
-  dispatch({ type: USER_REGISTER_REQUEST });
-  const { data } = await axios.post("http://localhost:8081/register", {
-      email,
-      firstName,
-      lastName,
-      password,
-    });
-    // setLoading(false)
-    if (data != "User exists") {
-        dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
-        dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
-        localStorage.setItem("userInfo", JSON.stringify(data));
+export const register =
+  (firstName, lastName, email, password) => async (dispatch) => {
+    dispatch({ type: USER_REGISTER_REQUEST });
+    const { data } = await registerUser(firstName, lastName, email, password);
+    if (data !== "User exists") {
+      dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
+      dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
+      localStorage.setItem("userInfo", JSON.stringify(data));
     } else {
-        dispatch({ type: USER_REGISTER_FAIL, payload: "Email already in use. please use a different Email" });
+      dispatch({
+        type: USER_REGISTER_FAIL,
+        payload: "Email already in use. please use a different Email",
+      });
     }
-};
+  };

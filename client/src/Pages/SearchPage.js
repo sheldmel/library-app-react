@@ -11,7 +11,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import axios from "axios";
+import { displayUserBooks, updateUserBooks, deleteBook, displayBooksBySearch } from "../api/utils";
 import { useSelector } from "react-redux";
 import ErrorMessage from "../components/ErrorMessage";
 
@@ -21,7 +21,6 @@ function BasicTable(props) {
   const _id = userInfo._id;
   const isAdmin = userInfo.isAdmin;
   const rows = props.rows;
-  const error = props.error;
   const setError = props.setError;
   const userBooks = props.userBooks;
   const toggleDb = props.toggleDb
@@ -52,7 +51,7 @@ function BasicTable(props) {
   }
   function Adminbutton2(props) {
     return (
-      <Button size="sm" onClick={() => deleteBook(props.id)}>
+      <Button size="sm" onClick={() => removeBook(props.id)}>
         Delete book
       </Button>
     );
@@ -73,11 +72,7 @@ function BasicTable(props) {
     } else {
       const books = userBooks;
       books.push(id);
-      axios
-        .post("http://localhost:8081/updateUserBooks", {
-          _id,
-          books,
-        })
+      updateUserBooks(_id, books)
         .then((response) => {
           console.log(response.data);
           setError("Book was added successfully");
@@ -88,9 +83,8 @@ function BasicTable(props) {
     }
   };
 
-  const deleteBook = (id, name) => {
-    axios
-    .post(`http://localhost:8081/deleteBook/${id}`)
+  const removeBook = (id, name) => {
+    deleteBook(id)
     .then(() => {
       setError( `${name} was deleted`);
       setTimeout(() => {
@@ -164,10 +158,9 @@ export const SearchPage = (props) => {
   useEffect(() => {
     console.log(search);
     document.title = `E-Library: ${search}`;
-    axios
-      .get(`http://localhost:8081/bookSearch/${search}`)
+    displayBooksBySearch(search)
       .then((response) => {
-        if (response.data.length != 0) {
+        if (response.data.length !== 0) {
           console.log(response.data);
           const data = response.data;
           setRows(data);
@@ -178,14 +171,11 @@ export const SearchPage = (props) => {
       .catch((err) => {
         console.log(err);
       });
-    axios
-      .get(`http://localhost:8081/userBooks/${id}`)
+    displayUserBooks(id)
       .then((response) => {
         console.log(response.data);
         const data = response.data;
-        {
-          document.title = `E-Library: MyBooks`;
-        }
+        document.title = `E-Library: MyBooks`;
         setUserBooks(data);
       })
       .catch((err) => {

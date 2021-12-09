@@ -1,35 +1,33 @@
-import React, { Component, useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   makeStyles,
 } from "@material-ui/core";
+import { displayBook } from "../api/utils";
 import Bookimage from "../components/Image";
 import Topbar from "../components/Navbar";
 import Searchbar from "../components/Searchbar";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import Container from "react-bootstrap/Container"
+
+
 export const DetailsPage = (props) => {
   const id = props.match.params.bookid;
   const [book, setBook] = useState([]);
   const classes = useStyles();
   useEffect(() => {
     setBook([]);
-    axios
-      .get(`http://localhost:8081/books/${id}`)
+    displayBook(id)
       .then((response) => {
         console.log(response.data);
         const data = response.data;
-        {
-          document.title = `E-Library: ${data.bookTitle}`;
-        }
+        document.title = `E-Library: ${data.bookTitle}`;
         setBook(data);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [id]);
   return (
     <Box>
       <Topbar></Topbar>

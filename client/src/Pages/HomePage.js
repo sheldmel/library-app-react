@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import { Box } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import { displayBooks, displayUserBooks, updateUserBooks, deleteBook } from "../api/utils";
 import Topbar from "../components/Navbar";
 import Searchbar from "../components/Searchbar";
 import Table from "@mui/material/Table";
@@ -11,7 +12,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import axios from "axios";
 import { useSelector } from "react-redux";
 import ErrorMessage from "../components/ErrorMessage";
 
@@ -21,15 +21,14 @@ function BasicTable(props) {
   const isAdmin = userInfo.isAdmin;
   const _id = userInfo._id;
   const rows = props.rows;
-  const error = props.error;
   const setError = props.setError;
   const userBooks = props.userBooks;
-  const toggleDb = props.toggleDb
-  const dbUpdated = props.dbUpdated
-  
+  const toggleDb = props.toggleDb;
+  const dbUpdated = props.dbUpdated;
+
   function NonAdminbutton(props) {
     return (
-      <Button size="sm" onClick={() => addBook(props.id)}>
+      <Button size="sm" onClick={() => addUserBook(props.id)}>
         Add Book
       </Button>
     );
@@ -51,14 +50,13 @@ function BasicTable(props) {
     );
   }
   function Adminbutton2(props) {
-
     return (
-      <Button size="sm" onClick={() => deleteBook(props.id, props.name)}>
+      <Button size="sm" onClick={() => removeBook(props.id, props.name)}>
         Delete Book
       </Button>
     );
   }
-  const addBook = (id) => {
+  const addUserBook = (id) => {
     if (userBooks.includes(id)) {
       setError("Book is already in your list.");
       setTimeout(() => {
@@ -73,13 +71,8 @@ function BasicTable(props) {
     } else {
       const books = userBooks;
       books.push(id);
-      axios
-        .post("http://localhost:8081/updateUserBooks", {
-          _id,
-          books,
-        })
+      updateUserBooks(_id, books)
         .then((response) => {
-          console.log(response.data);
           setError("Book was added successfully");
         })
         .catch((err) => {
@@ -88,19 +81,18 @@ function BasicTable(props) {
     }
   };
 
-  const deleteBook = (id, name) => {
-    axios
-    .post(`http://localhost:8081/deleteBook/${id}`)
-    .then(() => {
-      setError( `${name} was deleted`);
-      setTimeout(() => {
-        setError("");
-      }, 3000);
-      toggleDb(!dbUpdated)
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  const removeBook = (id, name) => {
+    deleteBook(id)
+      .then(() => {
+        setError(`${name} was deleted`);
+        setTimeout(() => {
+          setError("");
+        }, 3000);
+        toggleDb(!dbUpdated);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -140,7 +132,7 @@ function BasicTable(props) {
               </TableCell>
               <TableCell align="right">
                 {isAdmin ? (
-                  <Adminbutton2 id={row._id} name={row.bookTitle}/>
+                  <Adminbutton2 id={row._id} name={row.bookTitle} />
                 ) : (
                   <NonAdminbutton2 id={row._id} />
                 )}
@@ -160,11 +152,10 @@ export const HomePage = () => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
   const id = userInfo._id;
-  const [dbUpdated, toggleDb] = useState(false)
+  const [dbUpdated, toggleDb] = useState(false);
   useEffect(() => {
     document.title = "E-Library";
-    axios
-      .get("http://localhost:8081/books")
+    displayBooks()
       .then((response) => {
         console.log(response.data);
         const data = response.data;
@@ -173,14 +164,11 @@ export const HomePage = () => {
       .catch((err) => {
         console.log(err);
       });
-    axios
-      .get(`http://localhost:8081/userBooks/${id}`)
+    displayUserBooks(id)
       .then((response) => {
         console.log(response.data);
         const data = response.data;
-        {
-          document.title = `E-Library: MyBooks`;
-        }
+        document.title = `E-Library: MyBooks`;
         setUserBooks(data);
       })
       .catch((err) => {

@@ -1,7 +1,10 @@
-const router = require("express").Router();
-const userModel = require("../models/User");
+const generateToken = require("../utils/generateToken");
 
-app.post("/register", async (req, res) => {
+const router = require("express").Router();
+const userModel = require("../models/UserModel");
+
+
+router.post("/register", async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
   const books = [];
   const userExists = await userModel.findOne({ email });
@@ -9,6 +12,7 @@ app.post("/register", async (req, res) => {
     res.send("User exists");
   }
   console.log(email);
+  email = email.toLowerCase()
   const user = await userModel.create({
     firstName,
     lastName,
@@ -32,7 +36,7 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.post("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   const user = await userModel.findOne({ email: req.body.email });
   console.log(user);
   if (user && (await user.matchPassword(req.body.password))) {
@@ -50,7 +54,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/updateBooks", async (req, res) => {
+router.post("/updateBooks", async (req, res) => {
   const user = await userModel.findOneAndUpdate(
     { _id: req.body._id },
     { books: req.body.books },
@@ -66,7 +70,7 @@ app.post("/updateBooks", async (req, res) => {
   }
 });
 
-app.get("/books/:id", async (req, res) => {
+router.get("/books/:id", async (req, res) => {
   const user = await userModel.findOne({ _id: req.params.id });
   try {
     res.send(user.books);

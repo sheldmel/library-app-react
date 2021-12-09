@@ -1,13 +1,11 @@
-import React, { Component, useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { Box, makeStyles } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import Bookimage from "../components/Image";
+import { addBook } from "../api/utils";
 import Topbar from "../components/Navbar";
-import Searchbar from "../components/Searchbar";
 import ErrorMessage from "../components/ErrorMessage";
 import { useHistory } from "react-router-dom";
 
@@ -21,9 +19,7 @@ export const AddBookPage = (props) => {
   const [error, setError] = useState("");
   const history = useHistory();
   useEffect(() => {
-    {
       document.title = `E-Library: Add Book`;
-    }
   });
 
   const handleTitleChange = (e) => {
@@ -71,15 +67,12 @@ export const AddBookPage = (props) => {
       setError("The published year cannot be empty");
       return;
     }
-    const { data } = await axios.post("http://localhost:8081/addBook", {
-      bookTitle,
+    await addBook(bookTitle,
       bookDescription,
       bookGenre,
       yearPublished,
       bookAuthor,
-      bookImage,
-    });
-    console.log(data);
+      bookImage)
     history.push("/home");
   };
 

@@ -1,7 +1,7 @@
 const router = require("express").Router();
-const bookModel = require("../models/Book");
+const bookModel = require("../models/BookModel");
 
-app.get("/", async (req, res) => {
+router.get("/", async (req, res) => {
   const books = await bookModel.find({});
   try {
     res.send(books);
@@ -10,7 +10,7 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.get("/:genre", async (req, res) => {
+router.get("/genre/:genre", async (req, res) => {
   const books = await bookModel.find({ bookGenre: req.params.genre });
   try {
     res.send(books);
@@ -19,7 +19,7 @@ app.get("/:genre", async (req, res) => {
   }
 });
 
-app.get("/:search", async (req, res) => {
+router.get("/search/:search", async (req, res) => {
   const s = req.params.search;
   const search = s.replace(/%20/g, " ");
   const books = await bookModel.find({
@@ -39,7 +39,7 @@ app.get("/:search", async (req, res) => {
   }
 });
 
-app.post("/add", async (req, res) => {
+router.post("/add", async (req, res) => {
   const book = new bookModel(req.body);
   try {
     await book.save();
@@ -50,7 +50,7 @@ app.post("/add", async (req, res) => {
   }
 });
 
-app.post("/delete/:id", async (req, res) => {
+router.post("/delete/:id", async (req, res) => {
   try {
     book = await bookModel.deleteOne({ _id: req.params.id });
     res.send(book.bookTitle);
@@ -60,7 +60,7 @@ app.post("/delete/:id", async (req, res) => {
   }
 });
 
-app.post("/update/:id", async (req, res) => {
+router.post("/update/:id", async (req, res) => {
   const {
     bookTitle,
     bookDescription,
@@ -93,7 +93,7 @@ app.post("/update/:id", async (req, res) => {
   }
 });
 
-app.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const book = await bookModel.findOne({ _id: req.params.id });
     res.send(book);

@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -26,7 +26,7 @@ export const CreateAccountPage = () => {
   const dispatch = useDispatch();
   const userRegister = useSelector((state) => state.userRegister);
   const userLogin = useSelector((state) => state.userLogin);
-  const { loading, error, userInfo } = userRegister;
+  const { error, userInfo } = userRegister;
   const { userLoginInfo } = userLogin;
   const history = useHistory();
 
@@ -35,7 +35,7 @@ export const CreateAccountPage = () => {
     if (userLoginInfo) {
       history.push(`/home`);
     }
-  }, [history, userInfo]);
+  }, [history, userInfo, userLoginInfo]);
 
   function validateEmail(email) {
     const re =
