@@ -35,7 +35,7 @@ app.use(express.json());
 app.use('/api/users', userRoute);
 app.use('/api/books', bookRoute);
 
-app/get('/', (req,res) =>{
+app.get('/', (req,res) =>{
   res.send('Welcome to the E-library API')
 })
 
