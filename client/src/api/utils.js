@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const USER_URL = "http://localhost:8081/api/users";
-const BOOK_URL = "http://localhost:8081/api/books";
+const USER_URL = "https://e-libraryapp.herokuapp.com/api/users";
+const BOOK_URL = "https://e-libraryapp.herokuapp.com/api/books";
 
 // Books
 export const displayBooks = () => {
